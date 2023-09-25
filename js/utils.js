@@ -1,8 +1,8 @@
-function getRandomNumbers(lenght = 1) {
+function getRandomIndexes(length = 1) {
   let result = [];
 
-  while (result.length < lenght) {
-    const num = Math.floor(Math.random() * lenght);
+  while (result.length < length) {
+    const num = Math.floor(Math.random() * length);
     if (!result.includes(num)) result.push(num);
   }
 
@@ -14,10 +14,12 @@ function getRandomItem(array = []) {
 }
 
 /**
- * @param {{constraints: Array<'lowercase' | 'uppercase' | 'numbers' | 'symbols'>, lenght: number}} config
+ * @param {{length: number,constraints: Array<'lowercase' | 'uppercase' | 'numbers' | 'symbols'>}} config
  */
-export function createPassword({ length = 8, constraints = [] }) {
-  if (!constraints.length) return "";
+export function createPassword(config) {
+  const { constraints, length } = config;
+
+  if (!constraints.length || length <= 0) return "";
 
   const meta = {
     lowercase: "abcdefghijklmnopqrstuvwxyz",
@@ -27,14 +29,13 @@ export function createPassword({ length = 8, constraints = [] }) {
   };
 
   let result = "";
-
+  
   constraints.forEach((name) => (result += getRandomItem(meta[name])));
 
-  while (result.length < length) {
+  while (result.length < length)
     result += getRandomItem(meta[getRandomItem(constraints)]);
-  }
 
-  return getRandomNumbers(length)
-    .map((pos) => result[pos])
+  return getRandomIndexes(length)
+    .map((position) => result[position])
     .join("");
 }
