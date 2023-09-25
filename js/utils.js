@@ -1,4 +1,4 @@
-export function getRandomNumbers(lenght = 1) {
+function getRandomNumbers(lenght = 1) {
   let result = [];
 
   while (result.length < lenght) {
@@ -9,13 +9,12 @@ export function getRandomNumbers(lenght = 1) {
   return result;
 }
 
-export function getRandomItem(array = []) {
+function getRandomItem(array = []) {
   return array[Math.floor(Math.random() * array.length)];
 }
 
 /**
  * @param {{constraints: Array<'lowercase' | 'uppercase' | 'numbers' | 'symbols'>, lenght: number}} config
- * @returns {string}
  */
 export function createPassword({ length = 8, constraints = [] }) {
   if (!constraints.length) return "";
@@ -27,17 +26,15 @@ export function createPassword({ length = 8, constraints = [] }) {
     symbols: "~@$%^&*+-/_():[]\\?¡¿{}|<>!",
   };
 
-  let password = "";
+  let result = "";
 
-  constraints.forEach(function (name) {
-    password += getRandomItem(meta[name]);
-  });
+  constraints.forEach((name) => (result += getRandomItem(meta[name])));
 
-  while (password.length < length) {
-    password += getRandomItem(meta[getRandomItem(constraints)]);
+  while (result.length < length) {
+    result += getRandomItem(meta[getRandomItem(constraints)]);
   }
 
   return getRandomNumbers(length)
-    .map((pos) => password[pos])
+    .map((pos) => result[pos])
     .join("");
 }
